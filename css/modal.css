@@ -1,0 +1,86 @@
+#modal_content, #modal_content>div{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+#modal_content>div{
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.3);
+    transition: opacity 0.4s ease;
+}
+#modal_content>div.hide{
+    display: none;
+}
+#modal_content>div.show{
+    opacity: 1;
+}
+#modal_content .modal_content{
+    position: absolute;
+    width: 300px;
+    height: 230px;
+    top: 50%;
+    left: 50%;
+    margin-top: -115px;
+    margin-left: -150px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    transform-origin: 50% 50%;
+    transform: scale(0.9);
+    transition: transform 0.5s ease
+}
+#modal_content .registration_modal .modal_content{
+    height: 280px;
+    margin-top: -140px;
+}
+#modal_content>div.show .modal_content{
+    transform: scale(1);
+}
+#modal_content .button{
+    position: relative;
+    display: inline-block;
+    background-color: #808080;
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 7px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#modal_content .button:hover{
+    background-color: #B9B8B8;
+}
+#modal_content input:focus{
+    outline: none;
+}
+#modal_content input{
+    position: relative;
+    border-radius: 5px;
+    margin: 20px auto;
+    display: block;
+    width: 250px;
+    height: 27px;
+    text-indent: 20px;
+    font-size: 17px;
+    background: #DEDEDE;
+    border: none;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.5);
+    line-height: 27px;
+}
+#modal_content .error_state input{
+    box-shadow: inset 2px 2px 4px rgba(255,0,0,0.5);
+}
+#modal_content .buttons_block{
+    text-align: center;
+}
+#modal_content h1{
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 20px;
+    margin: 20px 0 20px 0;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/css/modal.css">
+</head>
+<body>
+    <div class="game_content"></div>
+    <div id="modal_content">
+        <div class="modal auth_modal hide">
+            <div class="modal_content">
+                <h1> Авторизация </h1>
+                <input type="email" class="email" name="email" placeholder="E-mail">
+                <input type="password" class="pass" name="password" placeholder="Пароль">
+                <div class="buttons_block">
+                    <div class="button login">Войти</div>
+                    <div class="button registration">Зарегистрироваться</div>
+                </div>
+            </div>
+        </div>
+        <div class="modal registration_modal hide">
+            <div class="modal_content">
+                <h1> Регистрация </h1>
+                <input type="text" class="name" name="name" placeholder="Имя">
+                <input type="email" class="email" name="email" placeholder="E-mail">
+                <input type="password" class="pass" name="password" placeholder="Пароль">
+                <div class="buttons_block">
+                    <div class="button back">Назад</div>
+                    <div class="button registration">Зарегистрироваться</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="//api.backendless.com/sdk/js/latest/backendless.js"></script>
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>
