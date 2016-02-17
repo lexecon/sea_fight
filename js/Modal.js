@@ -6,6 +6,7 @@ var Modal = function(options){
   })
 }
 Modal.prototype.show = function(){
+  $('#modal_content').addClass('show');
   clearTimeout(this.timmer);
   this.$el.removeClass('hide');
   this.$el.width(); // Принудительный repaint
@@ -17,6 +18,7 @@ Modal.prototype.close = function(){
   var _this = this;
   this.timmer = setTimeout(function(){
     _this.$el.addClass('hide');
+    $('#modal_content').removeClass('show');
     async.resolve()
   }, 550);
   return async.promise()
@@ -67,3 +69,23 @@ var RegistrationModal = function(options){// $el,onClickBack, onClickRegistratio
 }
 
 RegistrationModal.prototype = Object.create(Modal.prototype);
+
+var SelectUserModal = function(options){
+  Modal.apply(this, arguments);
+  this.onClickUser = options.onClickUser || function(){}
+}
+SelectUserModal.prototype = Object.create(Modal.prototype);
+SelectUserModal.prototype.createUsers = function(users){
+  var _this = this;
+  var userList = $('.user_list', this.$el);
+  for(var i = 0; i<users.data.length;i++){
+    var appendClass="";
+    if(users.data[i].email == User.email){
+      appendClass="hide";
+    }
+    userList.append('<div class="user_item '+appendClass+'">'+ users.data[i].name+'</div>');
+  }
+  $('.user_item').click(function(){
+    _this.onClickUser(users.data[$(this).index()])
+  })
+}

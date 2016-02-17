@@ -3,6 +3,11 @@ var APPLICATION_ID = '27F4B4CC-CEF6-F408-FF94-325C139E6400',
   VERSION = 'v1'; //default application version;
 Backendless.initApp(APPLICATION_ID, SECRET_KEY, VERSION);
 
+function Users(args) {
+  args = args || {};
+  this.___class = 'Users';
+  this.objectId = args.objectId || null;
+}
 var User = null;
 
 var authModal = new AuthModal({
@@ -18,7 +23,9 @@ var authModal = new AuthModal({
       Backendless.UserService.login(data.login, data.password, true, new Backendless.Async(
         function(user){
           User = user;
-          _this.close();
+          _this.close().done(function(){
+            selectUser();
+          })
         },
         function(){
           _this.addErrorState();
@@ -42,7 +49,9 @@ var registrationModal = new RegistrationModal({
     Backendless.UserService.register(user, new Backendless.Async(
       function(user){
         User = user;
-        _this.close();
+        _this.close().done(function(){
+          selectUser();
+        })
       },
       function(){
         _this.addErrorState();
@@ -55,8 +64,26 @@ var registrationModal = new RegistrationModal({
     })
   }
 })
+var selectUserModal = new SelectUserModal({
+  $el: $('.select_user_modal'),
+  onClickUser: function(user){
+    this.close().done(function(){
+      game.startGame(user);
+    })
+  }
+})
+
+
+var game = new Game()
+
 
 authModal.show();
+var selectUser = function(){
+  var users = Backendless.Persistence.of(Users).find();
+  selectUserModal.createUsers(users);
+  selectUserModal.show();
+}
+
 
 //Backendless.UserService.isValidLogin(new Backendless.Async(success, error));
 //
