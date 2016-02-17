@@ -21,12 +21,14 @@
     top: 50%;
     margin-top: -150px;
 }
+
+
 #game_content .my_field.load:after, #game_content .field.load:after{
     content: "";
     background: rgba(255, 255, 255, 0.5) url("../img/preloader.gif") center no-repeat;
 }
 #game_content .my_field.blocked:after, #game_content .field.blocked:after{
-    content: "Ход соперника";
+    content: "Ход соперника!";
     background: rgba(255, 255, 255, 0.7);
     line-height: 210px;
     text-align: center;
@@ -41,8 +43,16 @@
     line-height: 210px;
     text-align: center;
     font-weight: bold;
+    display: block;
+    position: absolute;
+    width: 100%;
 }
 #game_content .field.show:before{
+    content: "Ваш ход!";
+    line-height: 40px;
+    top: -50px;
+}
+#game_content .field.blocked:before{
     display: none;
 }
 #game_content .field_item {
@@ -58,8 +68,11 @@
 #game_content .field.show .field_item{
     display: block;
 }
-#game_content .field_item.ship, #game_content .field_item.corrupted{
+#game_content .field_item.ship{
     background: #9b9b9b;
+}
+#game_content .field_item.corrupted{
+    background: #FF2607;
 }
 #game_content .field_item.empty:after{
     position: absolute;

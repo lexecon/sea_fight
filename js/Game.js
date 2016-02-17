@@ -8,15 +8,21 @@ Game.prototype.startGame = function(user){
   this.rivalUser = user;
   $('#game_content').html('<h1>'+User.name+' - '+user.name+'</h1><div class="my_field show"></div><div class="field"></div>')
   this.subscribe(User.email+'-'+user.email);
-  this.sendMessage({state: 'start_game'});
   this.myField = new PlayerField({
     $el: $('.my_field', this.$el),
     onChangeState: function(location, state){
+      if(state == 2){
+        _this.rivalField.addBlocking();
+      }
       _this.sendMessage({state: 'answer_check_item', data:{location: location, state: state}});
     },
     onChangeAlive: function(points){
       _this.myField.setEmptyPoints(points);
       _this.sendMessage({state: 'set_empty_points', data:{points: points}});
+      if(!_this.myField.aliveShips){
+        alert('Вы проиграли')
+        _this.sendMessage({state: 'you_win'});
+      }
     }
   });
   this.rivalField = new RivalField({
@@ -26,6 +32,7 @@ Game.prototype.startGame = function(user){
       _this.sendMessage({state: 'check_item', data: index});
     }
   });
+  this.sendMessage({state: 'start_game'});
 
 }
 Game.prototype.checkItem = function(index){
@@ -72,6 +79,10 @@ Game.prototype.onMessage = function(result){
       }
       case 'set_empty_points':{
         _this.rivalField.setEmptyPoints(answer.data.points);
+        break;
+      }
+      case 'you_win':{
+        alert('Вы выиграли');
         break;
       }
     }

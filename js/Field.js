@@ -4,6 +4,7 @@ var Field = function(options){
   this.onChangeState = options.onChangeState || function(){};
   this.onChangeAlive = options.onChangeAlive || function(){}
   this.virtualField = []; // 0 - пустая клетка, 1 - палуба корабля, 2 - подбитая палуба корабля, 3 - пустое поле в которое стреляли
+  this.aliveShips = 10;
   this.generateField();
 }
 Field.prototype.setVirtualField = function(location, state, ship){
@@ -80,6 +81,7 @@ Field.prototype.checkItem = function(number){
     this.setVirtualField(number, 2);
     this.virtualField[number].ship.amountAlive--;
     if(!this.virtualField[number].ship.checkAlive()){
+      this.aliveShips--;
       this.onChangeAlive(this.virtualField[number].ship.nearbyPoints);
     }
     return true;
