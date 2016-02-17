@@ -1,4 +1,8 @@
-#game_content{
+#game_content,
+#game_content .my_field.load:after,
+#game_content .field.load:after,
+#game_content .my_field.blocked:after,
+#game_content .field.blocked:after{
     position: absolute;
     top: 0;
     left: 0;
@@ -17,11 +21,26 @@
     top: 50%;
     margin-top: -150px;
 }
+#game_content .my_field.load:after, #game_content .field.load:after{
+    content: "";
+    background: rgba(255, 255, 255, 0.5) url("../img/preloader.gif") center no-repeat;
+}
+#game_content .my_field.blocked:after, #game_content .field.blocked:after{
+    content: "Ход соперника";
+    background: rgba(255, 255, 255, 0.7);
+    line-height: 210px;
+    text-align: center;
+    font-weight: bold;
+}
+
 #game_content .field{
     margin-left: 50px;
 }
 #game_content .field:before{
-    content: "Ожидание игрока"
+    content: "Ожидание игрока";
+    line-height: 210px;
+    text-align: center;
+    font-weight: bold;
 }
 #game_content .field.show:before{
     display: none;
@@ -39,6 +58,32 @@
 #game_content .field.show .field_item{
     display: block;
 }
-#game_content .field_item.ship{
+#game_content .field_item.ship, #game_content .field_item.corrupted{
     background: #9b9b9b;
+}
+#game_content .field_item.empty:after{
+    position: absolute;
+    content: "";
+    display: block;
+    width:6px;
+    height: 6px;
+    background: black;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    margin-left: -3px;
+    margin-top: -3px;
+}
+#game_content .field_item.corrupted:after{
+    position: absolute;
+    content: "X";
+    display: block;
+    width: 10px;
+    height: 20px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    margin-left: -5px;
+    margin-top: -10px;
+    font-size: 17px;
 }

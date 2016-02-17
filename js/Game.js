@@ -4,24 +4,38 @@ var Game = function(){
 }
 
 Game.prototype.startGame = function(user){
+  var _this = this;
   this.rivalUser = user;
   $('#game_content').html('<h1>'+User.name+' - '+user.name+'</h1><div class="my_field show"></div><div class="field"></div>')
   this.subscribe(User.email+'-'+user.email);
-  //this.subscribe(user.email+'-'+User.email);
   this.sendMessage({state: 'start_game'});
   this.myField = new PlayerField({
-    $el: $('.my_field', this.$el)
+    $el: $('.my_field', this.$el),
+    onChangeState: function(location, state){
+      _this.sendMessage({state: 'answer_check_item', data:{location: location, state: state}});
+    },
+    onChangeAlive: function(points){
+      _this.myField.setEmptyPoints(points);
+      _this.sendMessage({state: 'set_empty_points', data:{points: points}});
+    }
   });
   this.rivalField = new RivalField({
     $el: $('.field', this.$el),
-    checkItem: function(index){
-
+    onCheckItem: function(index){
+      _this.rivalField.addLoading();
+      _this.sendMessage({state: 'check_item', data: index});
     }
   });
 
 }
+Game.prototype.checkItem = function(index){
+  if(!this.myField.checkItem(index)){
+    this.rivalField.removeBlocking();
+  }
+}
 Game.prototype.initRival = function(){
-  this.rivalField.show()
+  this.rivalField.show();
+
 }
 Game.prototype.subscribe = function(subtopic){
   var subscriptionOptions = new SubscriptionOptions({subtopic:subtopic});
@@ -34,6 +48,7 @@ Game.prototype.sendMessage = function(message){
   publishOptions.subtopic = this.rivalUser.email+'-'+User.email;
   Backendless.Messaging.publish( CHANNEL, JSON.stringify(message), publishOptions);
 }
+
 Game.prototype.onMessage = function(result){
   var _this = this;
   $.each( result.messages, function (){
@@ -43,7 +58,22 @@ Game.prototype.onMessage = function(result){
         _this.initRival();
         break;
       }
+      case 'check_item':{
+        _this.checkItem(answer.data);
+        break;
+      }
+      case 'answer_check_item':{
+        _this.rivalField.removeLoading();
+        _this.rivalField.setVirtualField(answer.data.location, answer.data.state);
+        if(answer.data.state == 3){
+          _this.rivalField.addBlocking();
+        }
+        break;
+      }
+      case 'set_empty_points':{
+        _this.rivalField.setEmptyPoints(answer.data.points);
+        break;
+      }
     }
-    console.dir(answer);
   });
 }

@@ -1,22 +1,94 @@
 var Field = function(options){
   this.$el = options.$el;
+  this.onCheckItem = options.onCheckItem || function(){};
+  this.onChangeState = options.onChangeState || function(){};
+  this.onChangeAlive = options.onChangeAlive || function(){}
+  this.virtualField = []; // 0 - пустая клетка, 1 - палуба корабля, 2 - подбитая палуба корабля, 3 - пустое поле в которое стреляли
   this.generateField();
-  this.checkItem = options.checkItem || function(){}
 }
-
-Field.prototype.generateField = function(){
-  for(var i = 0; i < 100; i++){
-    this.$el.append('<div class="field_item"></div>')
+Field.prototype.setVirtualField = function(location, state, ship){
+  var index = location;
+  if(typeof location == "object"){
+    index = this.getIndex(location);
+  }
+  if(ship){
+    this.virtualField[index].ship = ship;
+  }
+  this.virtualField[index].state= state;
+  switch(state){
+    case 1:{
+      this.getItem(location).addClass('ship');
+      break;
+    }
+    case 2:{
+      this.getItem(location).addClass('corrupted');
+      this.onChangeState(location, state);
+      break;
+    }
+    case 3:{
+      this.getItem(location).addClass('empty');
+      this.onChangeState(location, state);
+      break;
+    }
   }
 }
 
-Field.prototype.getItem = function(numbers){
-  var index = numbers[1]*10 + numbers[0];
+Field.prototype.setEmptyPoints = function(points){
+  var _this = this
+  $.each(points, function(num, point){
+    if(_this.virtualField[point].state == 0){
+      _this.virtualField[point].state = 3
+      _this.getItem(point).addClass('empty');
+    }
+  })
+}
+
+Field.prototype.addLoading = function(){
+  this.$el.addClass('load');
+}
+Field.prototype.removeLoading = function(){
+  this.$el.removeClass('load');
+}
+Field.prototype.addBlocking = function(){
+  this.$el.addClass('blocked');
+}
+Field.prototype.removeBlocking = function(){
+  this.$el.removeClass('blocked');
+}
+Field.prototype.generateField = function(){
+  for(var i = 0; i < 100; i++){
+    this.$el.append('<div class="field_item"></div>')
+    this.virtualField[i] = {state: 0, ship: null}
+  }
+}
+Field.prototype.getIndex = function(location){
+  return location[1]*10 + location[0];
+}
+
+Field.prototype.getItem = function(location){
+  var index = location;
+  if(typeof location == "object"){
+    index = location[1]*10 + location[0];
+  }
   return $('.field_item', this.$el).eq(index);
 }
 Field.prototype.show = function(){
   this.$el.addClass('show')
 }
+Field.prototype.checkItem = function(number){
+  if(this.virtualField[number].state == 1){
+    this.setVirtualField(number, 2);
+    this.virtualField[number].ship.amountAlive--;
+    if(!this.virtualField[number].ship.checkAlive()){
+      this.onChangeAlive(this.virtualField[number].ship.nearbyPoints);
+    }
+    return true;
+  }else{
+    this.setVirtualField(number, 3);
+    return false;
+  }
+}
+
 
 
 var PlayerField = function(options){
@@ -62,51 +134,16 @@ PlayerField.prototype.paintShips = function(){
   var _this = this;
   $.each(this.ships, function(num, ship){
     $.each(ship.location, function(num, location){
-      _this.getItem(location).addClass('ship')
+      _this.setVirtualField(location, 1, ship)
     });
   });
 }
 
 var RivalField = function(options){
   Field.apply(this, arguments);
-  var _this = this
+  var _this = this;
   $('.field_item', this.$el).click(function(){
-    _this.checkItem($(this).index());
+    _this.onCheckItem($(this).index());
   })
 }
 RivalField.prototype = Object.create(Field.prototype);
-
-
-
-
-
-var Ship = function(options){
-  this.amount = options.amount
-  this.location = options.location;
-}
-
-
-
-var Ship1 = function(options){
-  options.amount = 1;
-  Ship.call(this, options);
-}
-Ship1.prototype = Object.create(Ship.prototype);
-
-var Ship2 = function(options){
-  options.amount = 2;
-  Ship.call(this, options);
-}
-Ship2.prototype = Object.create(Ship.prototype);
-
-var Ship3 = function(options){
-  options.amount = 3;
-  Ship.call(this, options);
-}
-Ship3.prototype = Object.create(Ship.prototype);
-
-var Ship4 = function(options){
-  options.amount = 4;
-  Ship.call(this, options);
-}
-Ship4.prototype = Object.create(Ship.prototype);
