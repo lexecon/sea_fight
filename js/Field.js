@@ -4,10 +4,10 @@ var Field = function(options){
   this.onChangeState = options.onChangeState || function(){};
   this.onChangeAlive = options.onChangeAlive || function(){}
   this.virtualField = []; // 0 - пустая клетка, 1 - палуба корабля, 2 - подбитая палуба корабля, 3 - пустое поле в которое стреляли
-  this.aliveShips = 10;
+  this.aliveShips = 10; // Сколько кораблей еще на плаву
   this.generateField();
 }
-Field.prototype.setVirtualField = function(location, state, ship){
+Field.prototype.setVirtualField = function(location, state, ship){ // Изменение в виртуальном поле
   var index = location;
   if(typeof location == "object"){
     index = this.getIndex(location);
@@ -34,49 +34,49 @@ Field.prototype.setVirtualField = function(location, state, ship){
   }
 }
 
-Field.prototype.setEmptyPoints = function(points){
-  var _this = this
+Field.prototype.setEmptyPoints = function(points){ // Обведение точками потопленного корабля
+  var _this = this;
   $.each(points, function(num, point){
     if(_this.virtualField[point].state == 0){
-      _this.virtualField[point].state = 3
+      _this.virtualField[point].state = 3;
       _this.getItem(point).addClass('empty');
     }
   })
 }
 
-Field.prototype.addLoading = function(){
+Field.prototype.addLoading = function(){ // Перевести поле в режим ожидания сервера
   this.$el.addClass('load');
 }
-Field.prototype.removeLoading = function(){
+Field.prototype.removeLoading = function(){ // Перевести поле в обычный режим, после ожидания сервера
   this.$el.removeClass('load');
 }
-Field.prototype.addBlocking = function(){
+Field.prototype.addBlocking = function(){ // Заблокировать поле (не твой ход)
   this.$el.addClass('blocked');
 }
-Field.prototype.removeBlocking = function(){
+Field.prototype.removeBlocking = function(){ // Разблокировать поле
   this.$el.removeClass('blocked');
 }
-Field.prototype.generateField = function(){
+Field.prototype.generateField = function(){ // Создает клетки на поле и оздает пустое виртуальное поле
   for(var i = 0; i < 100; i++){
     this.$el.append('<div class="field_item"></div>')
     this.virtualField[i] = {state: 0, ship: null}
   }
 }
-Field.prototype.getIndex = function(location){
+Field.prototype.getIndex = function(location){ // Получить номер по координатам
   return location[1]*10 + location[0];
 }
 
-Field.prototype.getItem = function(location){
+Field.prototype.getItem = function(location){ // Получить DOM объект клетки по координатам или индексу
   var index = location;
   if(typeof location == "object"){
     index = location[1]*10 + location[0];
   }
   return $('.field_item', this.$el).eq(index);
 }
-Field.prototype.show = function(){
+Field.prototype.show = function(){ // Показать поле
   this.$el.addClass('show')
 }
-Field.prototype.checkItem = function(number){
+Field.prototype.checkItem = function(number){ // Стрельба по полю number
   if(this.virtualField[number].state == 1){
     this.setVirtualField(number, 2);
     this.virtualField[number].ship.amountAlive--;
@@ -93,46 +93,22 @@ Field.prototype.checkItem = function(number){
 
 
 
-var PlayerField = function(options){
+var PlayerField = function(options){ // Класс игрового поля игрока
   Field.apply(this, arguments);
   this.generateShips();
   this.paintShips();
 }
 PlayerField.prototype = Object.create(Field.prototype);
-PlayerField.prototype.generateShips = function(){
-  this.ships = [];
-  this.ships.push(new Ship1(
-    {location: [[0, 0]]}
-  ));
-  this.ships.push(new Ship1(
-    {location:[[3, 0]]}
-  ));
-  this.ships.push(new Ship1(
-    {location: [[5,0]]}
-  ));
-  this.ships.push(new Ship1(
-    {location: [[7, 0]]}
-  ));
-  this.ships.push(new Ship2(
-    {location: [[0, 2], [1, 2]]}
-  ));
-  this.ships.push(new Ship2(
-    {location: [[4, 2], [5, 2]]}
-  ));
-  this.ships.push(new Ship2(
-    {location: [[7, 2], [8, 2]]}
-  ));
-  this.ships.push(new Ship3(
-    {location: [[0, 4], [0,5], [0, 6]]}
-  ));
-  this.ships.push(new Ship3(
-    {location: [[2, 4], [2,5], [2, 6]]}
-  ));
-  this.ships.push(new Ship4(
-    {location: [[5, 4], [5,5], [5, 6], [5, 7]]}
-  ));
+PlayerField.prototype.generateShips = function(){ // Заполнение поля случайной комбинацией кораблей
+  function randomInteger(min, max) {
+    var rand = min + Math.random() * (max - min)
+    rand = Math.round(rand);
+    return rand;
+  }
+  var index = randomInteger(0, Game_variant.length-1)
+  this.ships = Game_variant[index];
 }
-PlayerField.prototype.paintShips = function(){
+PlayerField.prototype.paintShips = function(){ // Отрисовка кораблей на поле
   var _this = this;
   $.each(this.ships, function(num, ship){
     $.each(ship.location, function(num, location){
@@ -141,11 +117,14 @@ PlayerField.prototype.paintShips = function(){
   });
 }
 
-var RivalField = function(options){
+var RivalField = function(options){  // Класс игрового поля соперника
   Field.apply(this, arguments);
   var _this = this;
   $('.field_item', this.$el).click(function(){
-    _this.onCheckItem($(this).index());
+    if($(this).attr('class') == 'field_item'){
+      _this.onCheckItem($(this).index());
+    }
+
   })
 }
 RivalField.prototype = Object.create(Field.prototype);

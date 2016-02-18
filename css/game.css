@@ -64,15 +64,21 @@
 }
 #game_content .field .field_item{
     display: none;
+    cursor: pointer;
 }
 #game_content .field.show .field_item{
     display: block;
+
 }
 #game_content .field_item.ship{
     background: #9b9b9b;
 }
 #game_content .field_item.corrupted{
     background: #FF2607;
+    cursor: default;
+}
+#game_content .field_item.empty{
+    cursor: default;
 }
 #game_content .field_item.empty:after{
     position: absolute;

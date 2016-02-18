@@ -3,11 +3,11 @@ CHANNEL = 'default';
 var Game = function(){
 }
 
-Game.prototype.startGame = function(user){
+Game.prototype.startGame = function(user){  //Начало игры user - информация о сопернике
   var _this = this;
   this.rivalUser = user;
   $('#game_content').html('<h1>'+User.name+' - '+user.name+'</h1><div class="my_field show"></div><div class="field"></div>')
-  this.subscribe(User.email+'-'+user.email);
+  this.subscribe(User.email+'-'+user.email); // Подписка на канал сообщений
   this.myField = new PlayerField({
     $el: $('.my_field', this.$el),
     onChangeState: function(location, state){
@@ -35,28 +35,28 @@ Game.prototype.startGame = function(user){
   this.sendMessage({state: 'start_game'});
 
 }
-Game.prototype.checkItem = function(index){
+Game.prototype.checkItem = function(index){ // Проверка клетки на моем поле
   if(!this.myField.checkItem(index)){
     this.rivalField.removeBlocking();
   }
 }
-Game.prototype.initRival = function(){
+Game.prototype.initRival = function(){ // Соперник появился
   this.rivalField.show();
 
 }
-Game.prototype.subscribe = function(subtopic){
+Game.prototype.subscribe = function(subtopic){ // Подписка на канал сообщений
   var subscriptionOptions = new SubscriptionOptions({subtopic:subtopic});
   var sub = Backendless.Messaging.subscribe( CHANNEL, $.proxy(this.onMessage, this), subscriptionOptions);
   return sub;
 }
-Game.prototype.sendMessage = function(message){
+Game.prototype.sendMessage = function(message){ // Отправка сообщения в канал
   var publishOptions = new PublishOptions();
   publishOptions.publisherId = User.name;
   publishOptions.subtopic = this.rivalUser.email+'-'+User.email;
   Backendless.Messaging.publish( CHANNEL, JSON.stringify(message), publishOptions);
 }
 
-Game.prototype.onMessage = function(result){
+Game.prototype.onMessage = function(result){ // Слушатель сообщений
   var _this = this;
   $.each( result.messages, function (){
     var answer = JSON.parse(this.data);

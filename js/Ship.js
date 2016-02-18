@@ -1,7 +1,15 @@
-var Ship = function(options){
-  this.amount = options.amount;
-  this.amountAlive = options.amount;
-  this.location = options.location;
+var Ship = function(options){ // Класс корабля
+  this.amount = options.amount; // Количесво палуб корабля
+  this.amountAlive = options.amount; // Количество не потопленых палуб корабля
+  this.location = options.location; // Координаты палуб корабля
+  this.calculateNearbyPoints();
+
+}
+Ship.prototype.checkAlive = function(){ // Проверка жизни корабля
+  return this.amountAlive;
+}
+
+Ship.prototype.calculateNearbyPoints = function(){ // Расчет точек вокруг корабля
   this.nearbyPoints = [];
   var _this = this;
   $.each(this.location, function(num, location){
@@ -15,10 +23,6 @@ var Ship = function(options){
       }
     }
   })
-
-}
-Ship.prototype.checkAlive = function(){
-  return this.amountAlive;
 }
 
 

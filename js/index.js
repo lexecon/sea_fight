@@ -2,13 +2,14 @@ var APPLICATION_ID = '27F4B4CC-CEF6-F408-FF94-325C139E6400',
   SECRET_KEY = '1BCABB13-3115-2646-FF05-441A80AB8F00',
   VERSION = 'v1'; //default application version;
 Backendless.initApp(APPLICATION_ID, SECRET_KEY, VERSION);
+// Инициализация BaaS сервиса https://backendless.com/documentation/data/js/data_overview.htm
 
-function Users(args) {
+function Users(args) { // Шаблон пользователя для сохранения в Baas
   args = args || {};
   this.___class = 'Users';
   this.objectId = args.objectId || null;
 }
-var User = null;
+var User = null; // Данные о текущем пользователе
 
 var authModal = new AuthModal({
   $el: $('.auth_modal'),
@@ -37,7 +38,6 @@ var authModal = new AuthModal({
     }
   }
 });
-
 var registrationModal = new RegistrationModal({
   $el: $('.registration_modal'),
   onClickRegistration: function(data){
@@ -72,7 +72,6 @@ var selectUserModal = new SelectUserModal({
     })
   }
 })
-
 var successModal = new ResultModal({
   $el: $('.result_modal'),
   message: 'Вы выиграли!'
@@ -82,11 +81,10 @@ var failModal = new ResultModal({
   message: 'Вы проиграли ('
 })
 
-var game = new Game()
+var game = new Game();
 
-
-authModal.show();
-var selectUser = function(){
+authModal.show(); // Авторизация при перезагрузке страницы (Почему то сервис не сохраняет пользователя)
+var selectUser = function(){ // Загрузка всех пользователей и показ их в модалке
   var users = Backendless.Persistence.of(Users).find();
   selectUserModal.createUsers(users);
   selectUserModal.show();
