@@ -20,7 +20,7 @@ Game.prototype.startGame = function(user){  //Начало игры user - ин�
       _this.myField.setEmptyPoints(points);
       _this.sendMessage({state: 'set_empty_points', data:{points: points}});
       if(!_this.myField.aliveShips){
-        alert('Вы проиграли')
+        failModal.show();
         _this.sendMessage({state: 'you_win'});
       }
     }
