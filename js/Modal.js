@@ -89,3 +89,13 @@ SelectUserModal.prototype.createUsers = function(users){
     _this.onClickUser(users.data[$(this).index()])
   })
 }
+
+var ResultModal = function(options){
+  Modal.apply(this, arguments);
+  this.message = options.message;
+}
+ResultModal.prototype = Object.create(Modal.prototype);
+ResultModal.prototype.show = function(){
+  Modal.prototype.show.apply(this, arguments);
+  $('h1', this.$el).text(this.message);
+}

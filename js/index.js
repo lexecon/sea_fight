@@ -73,6 +73,14 @@ var selectUserModal = new SelectUserModal({
   }
 })
 
+var successModal = new ResultModal({
+  $el: $('.result_modal'),
+  message: 'Вы выиграли!'
+})
+var failModal = new ResultModal({
+  $el: $('.result_modal'),
+  message: 'Вы проиграли ('
+})
 
 var game = new Game()
 
@@ -83,40 +91,3 @@ var selectUser = function(){
   selectUserModal.createUsers(users);
   selectUserModal.show();
 }
-
-
-//Backendless.UserService.isValidLogin(new Backendless.Async(success, error));
-//
-//var user = new Backendless.User();
-//user.email = "lexecon117@gmail.com";
-//user.password = "1234567";
-////Backendless.UserService.register(user);
-//
-//function Comment(args) {
-//  args = args || {};
-//  this.message = args.message || "";
-//  this.authorEmail = args.authorEmail || "";
-//}
-//var dataStore = Backendless.Persistence.of(Comment);
-//var commentObject = new Comment({message: "I'm in", authorEmail: user.email});
-//dataStore.save( commentObject );
-
-//function userLoggedIn( user )
-//{
-//  console.log( "user has logged in" );
-//}
-//
-//function gotError( err ) // see more on error handling
-//{
-//  console.log( "error message - " + err.message );
-//  console.log( "error code - " + err.statusCode );
-//}
-
-//Backendless.UserService.login( 'lexecon117@gmail.com', '1234567', true, new Backendless.Async( userLoggedIn, gotError ) );
-
-//function success(data){ console.log(data);}
-//function error(data){
-//  console.log('Error'+data);
-//  Backendless.UserService.login( 'lexecon117@gmail.com', '1234567', true, new Backendless.Async( userLoggedIn, gotError ) );
-//}
-//Backendless.UserService.isValidLogin(new Backendless.Async(success, error));

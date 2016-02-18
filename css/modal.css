@@ -105,3 +105,6 @@
 .select_user_modal .user_list .user_item:hover{
     background: #DEDEDE;
 }
+.result_modal h1{
+    line-height: 180px;
+}

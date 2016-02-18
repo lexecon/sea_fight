@@ -82,7 +82,7 @@ Game.prototype.onMessage = function(result){
         break;
       }
       case 'you_win':{
-        alert('Вы выиграли');
+        successModal.show();
         break;
       }
     }
