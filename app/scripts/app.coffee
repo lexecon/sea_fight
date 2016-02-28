@@ -10,7 +10,9 @@ define (require, exports, module)->
   cookies = require 'cookies'
   # require 'utils/jqueryPatch'  # uncomment if You need touch-click support
   #GAConstructor = require 'sp-utils-gaconstructor'
-  #UserModel = require 'model/UserModel'
+  UserModel = require 'model/UserModel'
+  GameModel = require 'model/GameModel'
+#  BackendlessModel = require 'model/BackendlessModel'
   #social = require 'packages/social'
 
   $ = Backbone.$
@@ -31,8 +33,18 @@ define (require, exports, module)->
       common.api = new ServerApi
       @$document = $ document
 
+
       # Init UserModel
-      #common.user = new UserModel
+      common.user = new UserModel
+
+      # Init GameModel
+      common.game = new GameModel
+
+      # Шаблон пользователя для сохранения в Baas в глобальном контексте, так как этого требует сервис
+      common.BackendlessUsers = (args)->
+        args = args || {}
+        @objectId = args.objectId || null
+      common.BackendlessUsers.prototype.___class = 'Users'
 
       # Init google analitics
       #common.ga = new GAConstructor preprocess.GA, Backbone, true
@@ -57,16 +69,18 @@ define (require, exports, module)->
         item.showCurrent()
         this[key] = item
       Backbone.history.start {
-       pushState: Modernizr.history
+        pushState: Modernizr.history
       }
+
+      common.user.startLogin()
 
     initPushstateLinks: ->
       selector = "a:not([data-link]):not([href^='javascript:'])"
-      @$document.on "click", selector, (evt)->
-        $(".dropdown.open").removeClass("open")
-        return if !!$(this).parents(".pluso-box").length
-        href = $(this).attr("href") or ""
-        protocol = @protocol + "//"
+      @$document.on 'click', selector, (evt)->
+        $('.dropdown.open').removeClass('open')
+        return if !!$(this).parents('.pluso-box').length
+        href = $(this).attr('href') or ''
+        protocol = @protocol + '//'
         if href.slice(0, protocol.length) isnt protocol
           evt.preventDefault()
           common.router.navigate href, true

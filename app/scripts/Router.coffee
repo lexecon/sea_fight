@@ -20,7 +20,6 @@ define [
   class MiddlewareRouter extends Middleware
     auth: (async, args)->
       async.resolve 'auth'
-
   middleware = new MiddlewareRouter
 
   Router = Backbone.Router.extend

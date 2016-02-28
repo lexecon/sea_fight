@@ -4,5 +4,8 @@ define (require, exports, module)->
   require 'epoxy'
   ViewMixin = require 'utils/ViewMixin'
 
-  Layout = BackboneMixin(Backbone.View).extend {}
+  Layout = BackboneMixin(Backbone.Epoxy.View).extend {}
   ViewMixin Layout
+
+#  SuperClass = BackboneMixin(Backbone.Epoxy.View)
+#  Layout = SuperClass.extend {}

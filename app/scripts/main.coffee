@@ -31,6 +31,9 @@ require.config
     'bootstrap/tab': "#{VENDOR_PATH}/bootstrap-sass-official/assets/javascripts/bootstrap/tab"
     'bootstrap/tooltip': "#{VENDOR_PATH}/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip"
     'bootstrap/transition': "#{VENDOR_PATH}/bootstrap-sass-official/assets/javascripts/bootstrap/transition"
+
+    'backendless': "#{VENDOR_PATH}/backendless/libs/backendless"
+
   packages: [
     'view/layout'
     'view/widget'
@@ -46,6 +49,8 @@ require.config
       deps: ['jquery']
     _imagepreload:
       exports: 'PRELOADER'
+    backendless:
+      exports: 'Backendless'
 
 require ['app', 'common'], (App, common) ->
   common.app = new App common

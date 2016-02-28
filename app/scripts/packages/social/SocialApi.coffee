@@ -121,7 +121,6 @@ SocialApi = ($)->
         .fail (err)->
           async.reject err
       async.promise()
-
 if (typeof define is 'function') and (typeof define.amd is 'object') and define.amd
   define ['jquery'], ($)-> SocialApi($)
 else

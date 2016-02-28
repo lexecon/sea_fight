@@ -1,0 +1,37 @@
+.field_item
+  position: relative
+  width: 30px
+  height: 30px
+  float: left
+  outline: 1px solid grey
+  &.ship
+    background: #9b9b9b
+  &.empty
+    cursor: default
+    &:after
+      position: absolute
+      content: ""
+      display: block
+      width: 6px
+      height: 6px
+      background: black
+      border-radius: 50%
+      top: 50%
+      left: 50%
+      margin-left: -3px
+      margin-top: -3px
+  &.corrupted
+    background: #FF2607
+    cursor: default
+    &:after
+      position: absolute
+      content: "X"
+      display: block
+      width: 10px
+      height: 20px
+      border-radius: 50%
+      top: 50%
+      left: 50%
+      margin-left: -5px
+      margin-top: -10px
+      font-size: 17px

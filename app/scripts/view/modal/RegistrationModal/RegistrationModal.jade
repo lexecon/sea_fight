@@ -1,0 +1,11 @@
+//- .registration_modal
+extends ../Modal/_Modal
+
+block body
+  h1 Регистрация
+  input(data-js-name type="text" name="name" placeholder="Имя")
+  input(data-js-email type="email" name="email" placeholder="E-mail")
+  input(data-js-password type="password" name="password" placeholder="Пароль")
+  .buttons_block
+    .button(data-js-back) Назад
+    .button(data-js-registration) Зарегистрироваться

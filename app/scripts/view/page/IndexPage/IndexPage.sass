@@ -1,5 +1,45 @@
 .index_page
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
   h1
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
+    text-align: center
+    margin-top: 20px
+    font-size: 20px
+    opacity: 0
+    transition: opacity 0.5s ease
+    &.show
+      opacity: 1
+  .player_field
+    margin-left: -350px
+  .rival_field
+    margin-left: 50px
+    .field_item
+      cursor: pointer
+      opacity: 0
+      transition: opacity 0.5s ease
+    &:before
+      content: "Ожидание игрока"
+      line-height: 210px
+      text-align: center
+      font-weight: bold
+      display: block
+      position: absolute
+      width: 100%
+      opacity: 1
+      transition: opacity 0.5s ease
+    &.init
+      &:before
+        content: "Ваш ход!"
+        line-height: 40px
+        top: -50px
+      .field_item
+        opacity: 1
+    &.blocked
+      &:before
+        display: none
+
+
+

@@ -1,13 +1,10 @@
 //- .auth_modal
 extends ../Modal/_Modal
 
-block header
-  button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-  h4.modal-title Авторизоваться
-
 block body
-  img(src="/images/kitten.png" style="width:80%; margin-left: 10%;")
-  center Авторизуйтесь
-block footer
-  button.btn.btn-default(type='button', data-dismiss='modal') Закрыть
-  button.btn.btn-primary(type='button' data-ok) Авторизоваться
+  h1 Авторизация
+  input(data-js-email type="email" name="email" placeholder="E-mail")
+  input(data-js-password type="password" name="password" placeholder="Пароль")
+  .buttons_block
+    .button(data-js-login) Войти
+    .button(data-js-registration) Зарегистрироваться
