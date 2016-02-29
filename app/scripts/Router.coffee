@@ -26,8 +26,7 @@ define [
 
     routes:
       '': 'index'
-      '404': 'error404'
-      '*default': 'default_router'
+      '*default': 'index'
 
     index: middleware.wrap ->
       view = showPage Page.IndexPage
