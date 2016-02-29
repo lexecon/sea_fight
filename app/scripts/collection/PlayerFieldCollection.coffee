@@ -5,6 +5,7 @@ define (require, exports, module)->
 
   PlayerFieldCollection = FieldCollection.extend
     generateShips: ->
+      @shipsAlive = 10
       @ships = (new ShipField).getRandomShips()
       _.each @ships, (ship)=>
         _.each ship.location, (location)=>
@@ -17,6 +18,9 @@ define (require, exports, module)->
         ship.amountAlive--
         if !ship.amountAlive
           @trigger 'changeAliveShips', ship.nearbyPoints
+          @shipsAlive--
+          if !@shipsAlive
+            @trigger 'gameEnd'
         @trigger 'answerCheck', {index: index, state: 2}
         return true
       else

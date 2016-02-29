@@ -24,10 +24,6 @@ define (require, exports, module)->
       @sendMessage {state: 'start_game'}
 
 
-
-    checkRivalField: (index)->
-      @sendMessage {state: 'check_item', data: index}
-
     sendMessage: (message)->
       @backendless.sendMessage message, common.user.get('name'), "#{@get('email')} - #{common.user.get('email')}"
 

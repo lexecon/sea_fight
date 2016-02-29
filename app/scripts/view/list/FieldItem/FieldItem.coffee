@@ -13,4 +13,5 @@ define (require, exports, module)->
       'click': 'onClickItem'
 
     onClickItem: ->
-      @model.trigger 'clickField', @$el.index()
+      if @model.get('state') == 0
+        @model.trigger 'clickField', @$el.index()

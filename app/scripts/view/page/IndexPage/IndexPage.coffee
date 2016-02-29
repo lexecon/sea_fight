@@ -4,6 +4,8 @@ define (require, exports, module)->
   FieldList = require 'view/list/FieldList/FieldList'
   PlayerFieldCollection = require 'collection/PlayerFieldCollection'
   RivalFieldCollection = require 'collection/RivalFieldCollection'
+  WinnerModal = require 'view/modal/WinnerModal/WinnerModal'
+  FailModal = require 'view/modal/FailModal/FailModal'
 
   IndexPage = _Page.extend
     template: '#IndexPage'
@@ -30,12 +32,16 @@ define (require, exports, module)->
       @model = common.game
       @viewModel = common.user
       @listenTo common.user, 'change:auth', _.bind(@onChangeUserAuth, this)
-      @listenTo common.game, 'change:rivalName', _.bind(@onChangeRivalName, this)
-      @r.playerField.collection.generateShips()
+
       @listenTo @r.rivalField.collection, 'clickField', _.bind(@onClickRivalField, this)
+
       @listenTo common.game, 'onMessage', _.bind(@onMessage, this)
+      @listenTo common.game, 'change:rivalName', _.bind(@onChangeRivalName, this)
+
+      @r.playerField.collection.generateShips()
       @listenTo @r.playerField.collection, 'answerCheck', _.bind(@onAnswerCheck, this)
       @listenTo @r.playerField.collection, 'changeAliveShips', _.bind(@onChangeAliveShips, this)
+      @listenTo @r.playerField.collection, 'gameEnd', _.bind(@onGameEnd, this)
 
     onChangeUserAuth: (user, auth)->
       if auth
@@ -49,10 +55,14 @@ define (require, exports, module)->
 
     onClickRivalField: (index)->
       @r.rivalField.addLoading()
-      @model.checkRivalField index
+      common.game.sendMessage {state: 'check_item', data: index}
 
     onAnswerCheck: (data)->
       common.game.sendMessage {state: 'answer_check_item', data:{index: data.index, state: data.state}}
+
+    onGameEnd: ->
+      (new FailModal).showModal()
+      common.game.sendMessage {state: 'you_win'}
 
     onMessage: (answer)->
       switch(answer.state)
@@ -69,6 +79,6 @@ define (require, exports, module)->
             @r.rivalField.addBlocking()
         when 'set_empty_points'
           @r.rivalField.collection.setEmptyPoints(answer.data.points)
-        when 'you_win' then successModal.show();
+        when 'you_win' then (new WinnerModal).showModal()
 
 

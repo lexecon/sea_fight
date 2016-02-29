@@ -2,6 +2,5 @@ define (require, exports, module)->
   Backbone = require 'backbone'
   FieldCollection = require 'collection/FieldCollection'
 
-  RivalFieldCollection = FieldCollection.extend
-    test: ->
+  RivalFieldCollection = FieldCollection.extend {}
 
