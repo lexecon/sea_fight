@@ -1,0 +1,96 @@
+#content_layout
+  &>div
+    opacity: 0
+    transition: opacity 0.5s ease
+    &.show
+      opacity: 1
+    &.activate
+      .field:before
+        content: "Ваш ход!"
+        line-height: 40px
+        top: -50px
+      .field_item
+        display: block
+    &.load
+      .field:after
+        display: block
+        content: "Ожидайте ответа"
+    &.blocked
+      .field
+        &:before
+          display: none
+        &:after
+          display: block
+          content: "Ход соперника!"
+
+  .field
+    position: absolute
+    width: 300px
+    height: 300px
+    left: 50%
+    top: 50%
+    margin-top: -150px
+    &:after
+      display: none
+      position: absolute
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      text-align: center
+      line-height: 270px
+      background: rgba(255, 255, 255, 0.8)
+
+  .field_item
+    position: relative
+    width: 30px
+    height: 30px
+    float: left
+    outline: 1px solid grey
+    &.ship
+      background: #9b9b9b
+    &.empty
+      &:after
+        position: absolute
+        content: ""
+        display: block
+        width: 6px
+        height: 6px
+        background: black
+        border-radius: 50%
+        top: 50%
+        left: 50%
+        margin-left: -3px
+        margin-top: -3px
+    &.corrupted
+      background: #FF2607
+      &:after
+        position: absolute
+        content: "X"
+        display: block
+        width: 10px
+        height: 20px
+        border-radius: 50%
+        top: 50%
+        left: 50%
+        margin-left: -5px
+        margin-top: -10px
+        font-size: 17px
+        background: none
+  .player_field
+    margin-left: -350px
+  .rival_field
+    margin-left: 50px
+    &:before
+      content: "Ожидание игрока"
+      line-height: 210px
+      text-align: center
+      font-weight: bold
+      display: block
+      position: absolute
+      width: 100%
+    .field_item
+      cursor: pointer
+      display: none
+      &.corrupted
+        cursor: default
